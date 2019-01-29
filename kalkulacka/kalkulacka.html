@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="cs">
+	<head>
+		<meta charset="UTF-8">
+		<title>Kalkulačka</title>
+	</head>
+	<body>
+		<h1>Kalkulačka</h1>
+		<form action="" method="get">
+			<div>
+				<label>x</label>
+				<input type="text" size="3" name="x" id="x" 
+				value="0">
+			</div>
+			<div>
+				<label>y</label>
+				<input type="text" size="3" name="y" id="y"
+				value="0">
+			</div>
+			<div>
+				<label>
+				<input type="radio" name="operace" id="plus" value="plus" checked>
+				 +</label>
+				<label>
+				<input type="radio" name="operace" id="minus" value="minus">
+				 -</label>
+			</div>
+			<button type="button" name="submit" onclick="spocitej()">Vypočítat</button>
+			<p id="vysledek"></p>
+		</form>
+		<script>
+			function spocitej() {
+				var x = document.getElementById('x').value;
+				var y = document.getElementById('y').value;
+				if (document.getElementById('plus').checked) {
+					document.getElementById('vysledek').innerHTML = parseInt(x) + parseInt(y);
+				}
+				if (document.getElementById('minus').checked) {
+					document.getElementById('vysledek').innerHTML = parseInt(x) - parseInt(y);
+				}
+			}
+		</script>
+	</body>
+</html>

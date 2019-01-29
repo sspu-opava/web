@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="cs">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Generate PDF</title>
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<h1 class="text-center">Generate PDF</h1>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<canvas id="myChart" width="400" height="400" style="display:none"></canvas>
+        			<img id="img">
+					<canvas id="canvas" height="450" width="600" style="display:none"></canvas>
+        			<img id="url">
+				</div>
+			</div>
+		</div>
+
+		<!-- jQuery -->
+		<script src="http://code.jquery.com/jquery.js"></script>
+		<!-- Bootstrap JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+ 		<script>
+
+ 			var ctx = document.getElementById('myChart').getContext('2d');
+ 			var img = [];
+			var chart = new Chart(ctx, {
+			    // The type of chart we want to create
+			    type: 'line',
+
+			    // The data for our dataset
+			    data: {
+			        labels: ["January", "February", "March", "April", "May", "June", "July"],
+			        datasets: [{
+			            label: "My First dataset",
+			            backgroundColor: 'rgb(255, 99, 132)',
+			            borderColor: 'rgb(255, 99, 132)',
+			            data: [0, 10, 5, 2, 20, 10, 15],
+			        }]
+			    },
+
+			    // Configuration options go here
+			    options: {
+	  				animation: {
+	    				onComplete: function() {
+							img.push(chart.toBase64Image());
+			  				document.getElementById("img").src=img[0];	
+			  				renderPDF();    					
+	    				}
+	  				}
+			    }
+			});
+
+
+			var lineChartData = {
+				labels : ["January","February","March","April","May","June","July"],
+				datasets : [
+							{
+								fillColor : "rgba(220,220,220,0.5)",
+								strokeColor : "rgba(220,220,220,1)",
+								pointColor : "rgba(220,220,220,1)",
+								pointStrokeColor : "#fff",
+								data : [65,59,90,81,56,55,40],
+								bezierCurve : false
+					}
+				]
+			}
+
+			function done(){
+			  var url=myLine.toBase64Image();
+			  document.getElementById("url").src=url;
+			}
+
+			var options = {
+  				bezierCurve : false,
+  				animation: {
+    				onComplete: done
+  				}
+			};
+
+			var myLine = new Chart(document.getElementById("canvas").getContext("2d"),{
+				data:lineChartData,
+  				type:"line",
+  				options:options
+			});
+ 		</script>
+
+ 		<script>
+ 			function renderPDF() {
+				var doc = new jsPDF()
+				doc.text('Hello world!', 10, 10)
+				doc.addImage(img[0], "png", 10, 20, 150, 150, undefined, 'slow');
+				doc.addPage();
+				doc.text(20, 20, 'Do you like that?');
+				doc.save('a4.pdf')
+			}
+ 		</script>
+	</body>
+</html>
